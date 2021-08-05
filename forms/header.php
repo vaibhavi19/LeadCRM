@@ -38,6 +38,8 @@
         <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist.min.css">
         <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist-init.css">
         <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist-plugin-tooltip.css">
+<script src="../dist/js/all.js" data-auto-replace-svg="nest"></script>
+
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -51,11 +53,11 @@
         <div class="wrapper boxed-wrapper">
             <header class="main-header"> 
                 <!-- Logo --> 
-                <a href="index.html" class="logo blue-bg"> 
+                <a href="index.html" class="logo" style="background-color: #2f3742;font-family: fantasy;font-size: 34px;"> 
                     <!-- mini logo for sidebar mini 50x50 pixels --> 
-                    <span class="logo-mini"><img src="../dist/img/logo-n.png" alt=""></span> 
+                 
                     <!-- logo for regular state and mobile devices --> 
-                    <span class="logo-lg"><img src="../dist/img/logo.png" alt=""></span> </a> 
+                    <i>Lead CRM</i> </a> 
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar blue-bg navbar-static-top"> 
                     <!-- Sidebar toggle button-->
@@ -168,8 +170,8 @@
                      
                         <li class="active treeview"> <a href="#"> <i class="fa fa-dashboard"></i> <span>Configuration</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                             <ul class="treeview-menu">
-                                <li class="active"><a href="index.html">Configuration</a></li>
-                                <li><a href="index2.html">User Master</a></li>
+                                <li class="active"><a href="#">Configuration</a></li>
+                                <li><a href="listview.php?id=2">User Master</a></li>
                             </ul>
                         </li>
 
@@ -177,8 +179,8 @@
                          <ul class="sidebar-menu" data-widget="tree">
                         <li class="active treeview"> <a href="#"> <i class="fa fa-dashboard"></i> <span>Lead Info</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                             <ul class="treeview-menu">
-                                <li class="active"><a href="index.html">Lead Info</a></li>
-                                <li><a href="index2.html">Lead Listing</a></li>
+                                <li class="active"><a href="#">Lead Info</a></li>
+                                <li><a href="listview.php?id=1">Lead Listing</a></li>
                             </ul>
                         </li>
 
