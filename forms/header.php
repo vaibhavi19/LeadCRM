@@ -1,216 +1,251 @@
+<?php
+include_once '../sys/generalx.php';
+include '../sys/security.php';
 
+sec_session_start();
+if (login_check() == false) {
+    echo 'You are not authorized to access this page, please login. <br/>';
+    exit();
+}
+
+ $obj = new conn();
+//echo "<pre>"; print_r($_SESSION);exit;
+$user_img = $_SESSION['user_img'];
+$username = $_SESSION['user_name'];
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-
-        <?php
-        ob_start();
-        include_once '../sys/generalx.php';
-        include '../sys/security.php';
-
-        sec_session_start();
-//        if (login_check() == false) {
-//            echo 'You are not authorized to access this page, please login. <br/>';
-//            exit();
-//        }
-
-        $obj = new conn();
-        ?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Lead Desk</title>
+        <title>Card Desk</title>
         <!-- Tell the browser to be responsive to screen width -->
-        <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
-
-        <!-- v4.0.0-alpha.6 -->
-        <link rel="stylesheet" href="../dist/bootstrap/css/bootstrap.min.css">
-
-        <!-- Google Font -->
-        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <!-- JQVMap -->
+        <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="../dist/css/style.css">
-        <link rel="stylesheet" href="../dist/css/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" href="../dist/css/et-line-font/et-line-font.css">
-        <link rel="stylesheet" href="../dist/css/themify-icons/themify-icons.css">
-
-        <!-- Chartist CSS -->
-        <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist.min.css">
-        <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist-init.css">
-        <link rel="stylesheet" href="../dist/plugins/chartist-js/chartist-plugin-tooltip.css">
-<script src="../dist/js/all.js" data-auto-replace-svg="nest"></script>
-
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
+        <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+        <!-- Daterange picker -->
+        <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
+        <!-- summernote -->
+        <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     </head>
-    <body class="hold-transition skin-blue sidebar-mini">
-        <div class="wrapper boxed-wrapper">
-            <header class="main-header"> 
-                <!-- Logo --> 
-                <a href="index.html" class="logo" style="background-color: #2f3742;font-family: fantasy;font-size: 34px;"> 
-                    <!-- mini logo for sidebar mini 50x50 pixels --> 
-                 
-                    <!-- logo for regular state and mobile devices --> 
-                    <i>Lead CRM</i> </a> 
-                <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar blue-bg navbar-static-top"> 
-                    <!-- Sidebar toggle button-->
-                    <ul class="nav navbar-nav pull-left">
-                        <li><a class="sidebar-toggle" data-toggle="push-menu" href=""></a> </li>
-                    </ul>
-                    <div class="pull-left search-box">
-                        <form action="#" method="get" class="search-form">
-                            <div class="input-group">
-                                <input name="search" class="form-control" placeholder="Search..." type="text">
-                                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i> </button>
-                                </span></div>
-                        </form>
-                        <!-- search form --> </div>
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-                            <!-- Messages: style can be found in dropdown.less-->
-                            <li class="dropdown messages-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-envelope-o"></i>
-                                    <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have 4 new messages</li>
-                                    <li>
-                                        <ul class="menu">
-                                            <li><a href="#">
-                                                    <div class="pull-left"><img src="../dist/img/img1.jpg" class="img-circle" alt="User Image"> <span class="profile-status online pull-right"></span></div>
-                                                    <h4>Alex C. Patton</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">9:30 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left"><img src="../dist/img/img3.jpg" class="img-circle" alt="User Image"> <span class="profile-status offline pull-right"></span></div>
-                                                    <h4>Nikolaj S. Henriksen</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">10:15 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left"><img src="../dist/img/img2.jpg" class="img-circle" alt="User Image"> <span class="profile-status away pull-right"></span></div>
-                                                    <h4>Kasper S. Jessen</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">8:45 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left"><img src="../dist/img/img4.jpg" class="img-circle" alt="User Image"> <span class="profile-status busy pull-right"></span></div>
-                                                    <h4>Florence S. Kasper</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">12:15 AM</span></p>
-                                                </a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="footer"><a href="#">View All Messages</a></li>
-                                </ul>
-                            </li>
-                            <!-- Notifications: style can be found in dropdown.less -->
-                            <li class="dropdown messages-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-bell-o"></i>
-                                    <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">Notifications</li>
-                                    <li>
-                                        <ul class="menu">
-                                            <li><a href="#">
-                                                    <div class="pull-left icon-circle red"><i class="icon-lightbulb"></i></div>
-                                                    <h4>Alex C. Patton</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">9:30 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left icon-circle blue"><i class="fa fa-coffee"></i></div>
-                                                    <h4>Nikolaj S. Henriksen</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">1:30 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left icon-circle green"><i class="fa fa-paperclip"></i></div>
-                                                    <h4>Kasper S. Jessen</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">9:30 AM</span></p>
-                                                </a></li>
-                                            <li><a href="#">
-                                                    <div class="pull-left icon-circle yellow"><i class="fa  fa-plane"></i></div>
-                                                    <h4>Florence S. Kasper</h4>
-                                                    <p>I've finished it! See you so...</p>
-                                                    <p><span class="time">11:10 AM</span></p>
-                                                </a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="footer"><a href="#">Check all Notifications</a></li>
-                                </ul>
-                            </li>
-                  
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar"> 
-                <!-- sidebar: style can be found in sidebar.less -->
-                <div class="sidebar"> 
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="info" style="font-size: large;"> 
-                          <font><?php echo strtoupper($_SESSION['user_name']);?></font>
+    <body class="sidebar-mini layout-fixed sidebar-collapse">
+        <div class="wrapper">
+
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-dark navbar-warning" style="background-color:#752676;">
+<!--                #1f4290;-->
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="main_new.php" class="nav-link">Dashboard</a>
+                    </li>
+                
+                </ul>
+                <ul class="navbar-nav ml-auto">
+<!--                    <img src="../dist/img/crm1.png" alt="AdminLTE Logo" height="60px" width="60px" class="brand-image img-bordered-sm elevation-4">-->
+                </ul>
+
+            </nav>
+            <!-- /.navbar -->
+<?php //} ?>
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar elevation-4 sidebar-light-primary">
+                <!-- Brand Logo -->
+                <a href="main_new.php" class="brand-link">Lead
+<!--                    <img src="../dist/img/crm.jpg" alt="AdminLTE Logo" class="brand-image img-bordered-sm elevation-3"
+                         style="opacity: .8">-->
+                    <span class="brand-text font-weight-light"><b>CRM</b></span>
+                </a>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                 <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image2">
+                                  
+                           
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block"><?php echo $_SESSION['user_name']; ?></a>
                         </div>
                     </div>
 
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
-                    <ul class="sidebar-menu" data-widget="tree">
-                     
-                        <li class="active treeview"> <a href="#"> <i class="fa fa-dashboard"></i> <span>Configuration</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                            <ul class="treeview-menu">
-                                <li class="active"><a href="#">Configuration</a></li>
-                                <li><a href="listview.php?id=2">User Master</a></li>
-                            </ul>
-                        </li>
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <!--          here dynamic menus -->
+                        <?php
+                        $html = "";
+                        getMenuElements("0");
+                        echo $html;
+                        ?>
 
-                    </ul>
-                         <ul class="sidebar-menu" data-widget="tree">
-                        <li class="active treeview"> <a href="#"> <i class="fa fa-dashboard"></i> <span>Lead Info</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                            <ul class="treeview-menu">
-                                <li class="active"><a href="#">Lead Info</a></li>
-                                <li><a href="listview.php?id=1">Lead Listing</a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-                    <ul class="sidebar-menu" data-widget="tree">
-                        <li class="header"><a href="logout.php">Logout</a></li>
-                    </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
                 </div>
-                <!-- /.sidebar --> 
+                <!-- /.sidebar -->
             </aside>
 
+            <!-- Content Wrapper. Contains page content -->
 
-            <!-- jQuery 3 --> 
-            <script src="../dist/js/jquery.min.js"></script> 
 
-            <!-- v4.0.0-alpha.6 --> 
-            <script src="../dist/bootstrap/js/bootstrap.min.js"></script> 
 
-            <!-- template --> 
-            <script src="../dist/js/niche.js"></script> 
+            <?php
 
-            <!-- Chartjs JavaScript --> 
-            <script src="../dist/plugins/chartjs/chart.min.js"></script>
-            <script src="../dist/plugins/chartjs/chart-int.js"></script>
+            function getMenuElements($ParentID) {
+                // declare the global variable
+                global $html,$obj;
 
-            <!-- Chartist JavaScript --> 
-            <script src="../dist/plugins/chartist-js/chartist.min.js"></script> 
-            <script src="../dist/plugins/chartist-js/chartist-plugin-tooltip.js"></script> 
-            <script src="../dist/plugins/functions/chartist-init.js"></script>
+             
+
+                ////////////////////////////////////////////////start ////////////////////////////////////////////
+                $query = "SELECT distinct mm.menu_id, mm.menu_caption, mm.menu_url, mm.icon_url, mm.target,mm.icon_url,
+       (SELECT COUNT(*) FROM sys_menus WHERE parent_id =  mm.menu_id) AS child_count
+			FROM sys_menus mm join gm_role_menu rm on mm.menu_id = rm.menu_id
+				join gm_user_roles ur on ur.role_id = rm.role_id
+                WHERE mm.parent_id = '$ParentID' AND  mm.status = 'A' 
+				and ur.user_id = '" . $_SESSION['user_id'] . "'
+                ORDER BY display_order ";
+                // $query = "select * from sys_menus where parent_id = 0 and status = 'A' order by display_order";
+               
+                //echo $_SESSION['user_id'].' '.$query;exit;
+                $result = $obj->execute($query, $error_message);
+                $html = '<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">';
+                $i = 0;
+                while ($row = mysqli_fetch_array($result)) {
+                    if ($i == 0) {
+                        $active = 'active';
+                    } else {
+                        $active = '';
+                    }
+
+                    $html .= '<li class="nav-item has-treeview" id="' . $i . '" onclick="return add(' . $i . ')">';
+                    $html .= '<a href="' . $row['menu_url'] . '" id="submenu_' . $i . '" class="nav-link " target="'. $row['target'] .'">';
+                //    $html .= '<i class="nav-icon fas fa-tachometer-alt"></i>';
+                     $html .= '<i class="nav-icon fas '.$row['icon_url'].'"></i>';
+                    
+                    $html .= '<p>' . $row['menu_caption'] . '<i class="right fas fa-angle-left"></i></p></a>';
+
+                    if ($row['child_count'] > 0) {
+
+
+                        $html .= '<ul class="nav nav-treeview">';
+                        $query = "SELECT distinct mm.menu_id, mm.menu_caption, mm.menu_url, mm.icon_url, mm.target,mm.badge_name,
+       (SELECT COUNT(*) FROM sys_menus WHERE parent_id =  mm.menu_id) AS child_count
+			FROM sys_menus mm join gm_role_menu rm on mm.menu_id = rm.menu_id
+				join gm_user_roles ur on ur.role_id = rm.role_id
+                WHERE mm.parent_id = '" . $row['menu_id'] . "' AND  mm.status = 'A' 
+				and ur.user_id = '" . $_SESSION['user_id'] . "'
+                ORDER BY display_order ";
+                        //	$query ="select * from sys_menus where parent_id = ".$row['menu_id']." and status = 'A' order by display_order";
+                        $result1 = $obj->execute($query, $error_message);
+                        if ($result1) {
+                            while ($row1 = mysqli_fetch_array($result1)) {
+                                $html .= ' <li class="nav-item" id="subsubmenu_' . $i . '">';
+                                $html .='<a href="' . $row1['menu_url'] . '" class="nav-link active" target="'. $row1['target'] .'">';
+                                $html .= ' <i class="fas fa-circle nav-icon"></i><p>' . $row1['menu_caption'] . '</p>';
+                                if($row1['badge_name']!=""){
+                                    $html .= '<span class="badge badge-info right">' .  get_badge_count($row1['badge_name']) . '</span>';
+                                }
+                                $html .= '</a> </li>';
+                            
+                                
+                            }
+                        }
+                        $html .='</ul>';
+                    }
+
+
+                    $html .= '</li>';
+                    $i++;
+                }
+                $html .= '</ul>';
+                mysqli_free_result($result);
+                unset($obj);
+            }
+            
+            
+            function get_badge_count($badge_name){
+              
+                global $obj;
+                $error_message = "";
+               $count =  $obj->get_execute_scalar("select ifnull($badge_name,0) as count from gm_user_master where user_id = '". $_SESSION['user_id'] ."'", $error_message);
+               if($count==0){
+               return "";    
+               }else{
+               return $count;    
+               } 
+               
+            }
+            
+            ?>
+
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery -->
+        <script src="../plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="../plugins/chart.js/Chart.min.js"></script>
+        <!-- Sparkline -->
+        <script src="../plugins/sparklines/sparkline.js"></script>
+        <!-- JQVMap -->
+        <script src="../plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="../plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="../plugins/jquery-knob/jquery.knob.min.js"></script>
+        <!-- daterangepicker -->
+        <script src="../plugins/moment/moment.min.js"></script>
+        <script src="../plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="../plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../dist/js/adminlte.js"></script>
+        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <script src="../dist/js/pages/dashboard.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="../dist/js/demo.js"></script>
+        <script>
+          function add(id) {
+              //  $("#subsubmenu_"+id).css('display','block');
+              $('a').removeClass('active');
+              $("#submenu_" + id).addClass('active');
+          }
+        </script>
     </body>
-
-
 </html>

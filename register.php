@@ -46,20 +46,49 @@
             <!-- /.login-logo -->
             <div class="card">
                 <div class="card-body">
-                    <p class="login-box-msg">Login Here</p>
+                    <p class="login-box-msg">Register Here</p>
 
 
-                    <form  action="forms/login_process.php" method="post" name="login_form" id="login_form"  autocomplete="off">
-                       
+                    <form  action="forms/register_process.php" method="post" name="register_form" id="register_form"  autocomplete="off">
+                        <input type="hidden" id="otp_send" name="otp_send" value="">
+                        <div class="form-group">
+                            <select name="industry_name" id="industry_name" class="form-control">
+                                <option value="">Select Industry</option>
+                                <?php
+                                $shop_id = "";
+                                $query = " select  industry_id ,industry_name from mst_industries  ";
+                                echo $obj->fill_combo($query, $industry_id, true);
+                                ?>
+                            </select> 
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="txtName" id="txtName" class="form-control" placeholder="Name" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="email" name="txtEncEmail" id="txtEncEmail" class="form-control" placeholder="Email" autocomplete="off">
+                        </div>
+
                         <div class="form-group">
                             <input type="text" name="txtEncMobile" maxlength="10" id="txtEncMobile" class="form-control" placeholder="Mobile" autocomplete="off">
                         </div>
 
                         <div class="form-group">
+                            <button type="button" name="generate_otp" id="generate_otp" class="col-md-12 btn btn-primary" onclick="generateotp()">Generate OTP</button>
+                        </div>
+  <div class="form-group">
+                            <input type="password" name="otp_verify" id="otp_verify" class="form-control" placeholder="Enter OTP" autocomplete="off">
+
+                        </div>
+                        <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" autocomplete="off">
 
                         </div>
-                   
+                      <div class="form-group">
+                            <input type="password" name="conpassword" id="conpassword" class="form-control" placeholder="Enter confirm password" autocomplete="off">
+
+                        </div>
 
                         <div class="input-group mb-3">
                             <p class="mb-0" style="color: red;"><?php echo $error_text; ?></p>
@@ -68,13 +97,13 @@
                         <div class="row">
                             <!-- /.col -->
 
-                            <button type="submit" name="submit" class="col-md-12 btn btn-primary btn-block">Login</button>
+                            <button type="submit" name="submit" class="col-md-12 btn btn-primary btn-block">Register</button>
 
                             <!-- /.col -->
                         </div>
                         <br>
                         <div class="form-group">
-                            <a href="register.php" class="btn btn-warning col-md-12">Not Register? Please Register</a>
+                            <a href="index.php" class="btn btn-warning col-md-12">Already Registered? Please login</a>
                         </div>
                     </form>
 
@@ -146,22 +175,49 @@
                 });
 
 
-                $('#login_form').validate({
+                $('#register_form').validate({
                     rules: {
+                        industry_name: {
+                            required: true
+                        },
+                        txtName: {
+                            required: true
+                        },
+                        txtEncEmail: {
+                            required: true
+                        },
                         txtEncMobile: {
                             required: true
                         },
-                        password: {
+                        otp_verify: {
                             required: true,
+                            equalTo: "#otp_send"
+                        },
+                        conpassword:{
+                              required: true,
+                            equalTo: "#password"
                         }
                     },
                     messages: {
-                        
+                        industry_name: {
+                            required: "Please select shop"
+                        },
+                        txtName: {
+                            required: "Please enter Company Name"
+                        },
+                        txtEncEmail: {
+                            required: "Please enter email"
+                        },
                         txtEncMobile: {
                             required: "Please enter mobile"
                         },
-                        password: {
-                            required: "Please enter password",
+                        otp_verify: {
+                            required: "Please enter OTP",
+                            equalTo: "Incorrect OTP"
+                        },
+                        conpassword:{
+                             required: "Please enter password",
+                            equalTo: "Password does not match"
                         }
                     },
                     errorElement: 'span',

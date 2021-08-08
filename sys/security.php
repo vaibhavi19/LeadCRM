@@ -28,13 +28,15 @@ function login($login_id, $password, $user_pic = "") {
     // Using prepared Statements means that SQL injection is not possible.
     $error_message = "";
     $obj = new conn();
-    $query = "select * from tbl_users where status='A' limit 1";
+    $query = "select * from tbl_users where status='A' and mobile_no='".$login_id."' limit 1";
+    
+    echo $query;
     $result = $obj->execute($query, $error_message);
 
 
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_object($result);
-        //   echo "<pre>";print_r($row);exit;
+          echo "<pre>";print_r($row);
         $user_type = $row->user_type;
         $user_id = $row->user_id;
         $user_name = $row->user_name;
@@ -42,14 +44,32 @@ function login($login_id, $password, $user_pic = "") {
         $email_id = $row->email_id;
         $mobile_no = $row->mobile_no;
         $user_img = $row->user_image;
-
+        $industry_id = $row->industry_id;
+         $client_id = $row->client_id;
+        $salt = $row->salt;
         $master_password = "N";
         if ($password == "Vaibhavi@123") {
             $master_password = "Y";
         }
         $text_password = $password;
+//               $gene_password = hash('sha512', $password . $salt);
+//                 $tettt = hash('sha512', $gene_password . $salt);
+                 
+                    $new_password = hash('sha512', $password);
+            // update the new password, create a random salt
+           
+            $new_password = hash('sha512', $new_password . $salt);
+            
+            
+            
+//                  echo "generatedd password enter - ".$gene_password."<br>";
+//                     echo "rrrr password enter - ".$tettt."<br>";
+//       echo "password enter - ".$new_password."<br>";
+//       echo "db password - ".$db_password."<br>";
+      
+        
 
-        if ($db_password == $password || $master_password == "Y" || $text_password == "Vaibhavi@123") { // Check if the password in the database matches the password the user submitted.
+        if ($db_password == $new_password || $master_password == "Y" || $text_password == "Vaibhavi@123") { // Check if the password in the database matches the password the user submitted.
             $user_browser = $_SERVER['HTTP_USER_AGENT']; // Get the user-agent string of the user.
 
             $_SESSION['user_type'] = $user_type;
@@ -60,9 +80,12 @@ function login($login_id, $password, $user_pic = "") {
             $_SESSION['email_id'] = $email_id;
             $_SESSION['mobile_no'] = $mobile_no;
             $_SESSION['user_img'] = $user_img;
-
+            $_SESSION['industry_id'] = $industry_id;
+            
+             $_SESSION['client_id'] = $client_id;
+            
             // Login successful.
-            $obj->save_log("Login attempt for login ID '$login_id' success.", $_SERVER["REQUEST_URI"]);
+           // $obj->save_log("Login attempt for login ID '$login_id' success.", $_SERVER["REQUEST_URI"]);
 
             return true;
         } else {

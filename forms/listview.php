@@ -132,7 +132,7 @@ mysqli_free_result($result);
     $result = $obj->execute($sql, $error_message);
     if (($result) || (mysqli_errno() == 0)) {
         while ($row = mysqli_fetch_array($result)) {
-            echo "<a class='btn btn-primary' href=".$row['menu_url']." onclick=\"javascript:redirectToURL('" . $row['menu_url'] . "','" . $row['target'] . "',$listview_id);\"><b>" . $row['menu_caption'] . "</b></a> "; //onclick=\"javascript:redirectToURL('" . $row['menu_url'] . "','" . $row['target'] . "');\"
+            echo "<a class='btn bg-gradient-info' href=".$row['menu_url']." onclick=\"javascript:redirectToURL('" . $row['menu_url'] . "','" . $row['target'] . "',$listview_id);\"><b>" . $row['menu_caption'] . "</b></a> "; //onclick=\"javascript:redirectToURL('" . $row['menu_url'] . "','" . $row['target'] . "');\"
         }
     } else {
         echo "Invalid view ID, no such view found in the table.";

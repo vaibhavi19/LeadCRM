@@ -141,6 +141,19 @@ class conn {
         //exit();
         return $this->execute($query, $error_message);
     }
+    
+       function save_lead_log($activity_desc, $activity_type,$lead_id,$client_id) {
+        $query = $error_message = "";
+        $user_id = (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "");
+        $ip_address = (isset($_SESSION['ip_address']) ? $_SESSION['ip_address'] : $_SERVER['REMOTE_ADDR']);
+        $query = "insert into trn_log_lead (lead_id, client_id,user_id, activity_desc, activity_type, created_on, ip_address ) "
+                . " values (" . replaceBlank($lead_id) . ",".  replaceBlank($client_id).",".  replaceBlank($user_id).",".  replaceBlank($activity_desc).",".  replaceBlank($activity_type).",now(), "
+                . replaceBlank($ip_address) . ")";
+  
+        return $this->execute($query, $error_message);
+    }
+    
+    
     function save_vendor_bank_audit_log($log_description, $vendor_id, $type) {
         $query = $error_message = "";
         $created_by = (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "");
