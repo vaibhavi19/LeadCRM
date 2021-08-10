@@ -23,13 +23,13 @@ function send_mail($mail_display_name, $message_from_mail, $message_to, $message
 //    //$mail->Port = 587;                   // set the SMTP port for the GMAIL server
 
     // trying thrigy mandrill
-    $mail->Host = "smtp.mandrillapp.com";      // sets GMAIL as the SMTP server
+    $mail->Host = "smtp.wincrm.in";      // sets GMAIL as the SMTP server
     $mail->SMTPAuth = true;                  // enable SMTP authentication
     //$mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
-    $mail->Port = 587;                   // set the SMTP port for the GMAIL server
+    $mail->Port = 25;                   // set the SMTP port for the GMAIL server
 
-    $mail->Username = "nair.saji@hiranandani.net";  // GMAIL username
-    $mail->Password = "MxHYflcT5NVIiWdOVXKz8g";            // GMAIL password
+    $mail->Username = "mail@wincrm.in";  // GMAIL username
+    $mail->Password = "Mukesh@24111986";            // GMAIL password
     //$mail->SetFrom($row['message_from_mail'], $row['message_from_name']);
     $mail->SetFrom($message_from_mail, $mail_display_name);
 
@@ -37,7 +37,7 @@ function send_mail($mail_display_name, $message_from_mail, $message_to, $message
 
     $mail->Subject = $message_subject;
 
-    $message_body = eregi_replace("[\]", '', $message_body);
+  //  $message_body = eregi_replace("[\]", '', $message_body);
 
     //$mail->AltBody    = ""; // optional, comment out and test
 
@@ -77,13 +77,15 @@ function send_mail($mail_display_name, $message_from_mail, $message_to, $message
         }
     }
 
-    $mail->AddBCC("nair.saji@hiranandani.net");
+    $mail->AddBCC("shirodkarsiddhesh08@gmail.com");
     //$mail->AddAttachment("images/phpmailer.gif");      // attachment
     //$mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
 
     $m_outmsg = "Message sent!";
     if (!$mail->Send()) {
-        $m_outmsg = "Mailer Error: " . $mail->ErrorInfo;
+       return 'failure';
+    }else{
+        return 'success';
     }
     return $m_outmsg;
 }

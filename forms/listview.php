@@ -16,6 +16,9 @@ if (($result) || (mysqli_errno() == 0)) {
     $listview_caption = $row['description'];
     $listview_sql = $row['sql_text'];
     $listview_sql = str_replace("_SESSION_USER_ID", $_SESSION['user_id'], $listview_sql);
+     $listview_sql = str_replace("_CLIENT_ID", $_SESSION['client_id'], $listview_sql);
+    
+    //echo $listview_sql;exit;
    
 } else {
     echo "Invalid view ID, no such view found in the table.";

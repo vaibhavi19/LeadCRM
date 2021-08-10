@@ -10,7 +10,7 @@ $obj = new conn();
 $user_id = $_GET['uid'];
 $view_id = $_GET['viewid'];
 $error_message = "";
-$user_name = $obj->get_execute_scalar("select user_name from gm_user_master where user_id = '$user_id'", $error_message);
+$user_name = $obj->get_execute_scalar("select user_name from tbl_users where user_id = '$user_id'", $error_message);
 $obj->save_log("Grant user role page opened for $user_name.", $_SERVER["REQUEST_URI"]);
 
 
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 case when pju.user_id is null then '' else 'checked' end as checked
                                 from gm_role_master prj left join gm_user_roles pju 
                                 on prj.role_id = pju.role_id and pju.user_id = '$user_id'
-                                where prj.status='A' order by prj.role_desc";
+                                where prj.status='A' and prj.created_by=".$_SESSION['user_id']."  order by prj.role_desc";
                                  //   $sql = "select u.vendor_category_id,la.vendor_id,u.vendor_category_name , case when la.vendor_id is null then '' else 'checked' end as STATUS from mst_vendor_category u left join trn_vendor_category la on la.vendor_category_id = u.vendor_category_id and la.vendor_id=$pkey_id";
                                     $obj = new conn();
                                    // echo $sql;exit;

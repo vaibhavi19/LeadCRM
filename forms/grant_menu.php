@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['btnSave'])) {
         if (save_data() == true) {
             $obj->save_log("Grant menu rights page - data saved succesfully.", $_SERVER["REQUEST_URI"]);
-            header("location: listview.php?id=1");
+            header("location: listview.php?id=3");
             exit;
         }
     }
@@ -85,7 +85,6 @@ function getMenuElements2($ParentID) {
                         from sys_menus sm left join gm_role_menu rm on sm.menu_id = rm.menu_id
                         and rm.role_id = '$role_id' and rm.menu_type = 'M' where sm.status = 'A' and sm.parent_id = '$ParentID' order by sm.display_order";
 
-   // echo $query;exit;
     $obj = new conn();
     $result = $obj->execute($query, $error_message);
      $elementStructure = "";
@@ -113,9 +112,8 @@ function getMenuElements2($ParentID) {
 
     $obj = new conn();
     $resultchild = $obj->execute($query, $error_message);
-     while ($rowchild = mysqli_fetch_array($resultchild)) {   
-         //card-header
-                   $elementStructure .= "<div class=''>
+     while ($rowchild = mysqli_fetch_array($resultchild)) {     
+                   $elementStructure .= "<div class='card-header'>
                                             <i class='fas fa-minus float-left '></i>
                                             <b class='header-title float-left'>&nbsp;&nbsp;&nbsp;
                                                 <input type='checkbox' name='chkMenuID[]' id='chkMenuID[]' value='m:{$rowchild['menu_id']}' " . (($rowchild['chk'] == "checked") ? "checked" : "") . ">
@@ -144,8 +142,8 @@ function save_data() {
     }
     $user_list = $obj->get_execute_scalar("select group_concat(user_id) from gm_user_roles where role_id ='$role_id'", $error_message);
 
-     $query = "update gm_user_master set rebuild_menu = 'Y' where user_id in ($user_list) and status = 'A'";
-        array_push($array, $query);
+//     $query = "update gm_user_master set rebuild_menu = 'Y' where user_id in ($user_list) and status = 'A'";
+//        array_push($array, $query);
     
     $error_message = "";
     if (!$obj->execute_sqli_array($array, $error_message)) {

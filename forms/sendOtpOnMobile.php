@@ -11,8 +11,8 @@ include '../sys/generalx.php';
 include_once '../sys/send_quick_sms.php';
 
 $mobile_no1 = isset($_GET['mobile'])?$_GET['mobile']:"";
-$mobile_otp = isset($_GET['otp'])?$_GET['otp']:"";
-$login_verify_mobile = isset($_GET['login_verify_mobile'])?$_GET['login_verify_mobile']:"";
+$mobile_otp = isset($_GET['num'])?$_GET['num']:"";
+//$login_verify_mobile = isset($_GET['login_verify_mobile'])?$_GET['login_verify_mobile']:"";
 
 
 //if(isset($login_verify_mobile) && $login_verify_mobile == 'YES'){

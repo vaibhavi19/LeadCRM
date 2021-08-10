@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-include('header.php');
+include('header_plain.php');
 ?>
 
 <?php
@@ -254,23 +254,23 @@ $description = $document_path = $image_name = "";
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label>First Name<font color="red">*</font></label>
-                                                                <input type="text"  class="form-control" name="first_name" id="first_name" value="<?php echo $challan_number; ?>" placeholder="Challan Number..">
+                                                                <input type="text"  class="form-control" name="first_name" id="first_name" value="<?php echo $client_first_name; ?>" placeholder="First Name..">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label>Last Name<font color="red">*</font></label>
-                                                                <input type="text"  class="form-control" name="last_name" id="last_name" value="<?php echo $challan_number; ?>" placeholder="Challan Number..">
+                                                                <input type="text"  class="form-control" name="last_name" id="last_name" value="<?php echo $client_last_name; ?>" placeholder="Last name..">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label>Gender<font color="red">*</font></label>
                                                                 <select class="form-control" id="gender" name="gender">
-                                                                    <option <?php echo $gender == "" ? "selected" : ""; ?> value="">-- Select Gender--</option>
-                                                                    <option <?php echo $gender == "Invoice" ? "selected" : ""; ?> value="Male">Male</option>
-                                                                    <option <?php echo $gender == "IOM" ? "selected" : ""; ?> value="Female">Female</option>
-                                                                    <option <?php echo $gender == "HOLD RELEASE" ? "selected" : ""; ?> value="Other">Other</option>
+                                                                    <option <?php echo $client_gender == "" ? "selected" : ""; ?> value="">-- Select Gender--</option>
+                                                                    <option <?php echo $client_gender == "Male" ? "selected" : ""; ?> value="Male">Male</option>
+                                                                    <option <?php echo $client_gender == "Female" ? "selected" : ""; ?> value="Female">Female</option>
+                                                                    <option <?php echo $client_gender == "Other" ? "selected" : ""; ?> value="Other">Other</option>
 
                                                                 </select>
 
@@ -282,7 +282,7 @@ $description = $document_path = $image_name = "";
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label>Company Name<font color="red">*</font></label>
-                                                                <input type="text"  class="form-control" name="mobile_no" id="mobile_no" value="<?php echo $challan_number; ?>" placeholder="Company Name..">
+                                                                <input type="text"  class="form-control" name="company_name" id="company_name" value="<?php echo $company_name; ?>" placeholder="Company name..">
                                                             </div>
                                                         </div>
 
@@ -290,7 +290,7 @@ $description = $document_path = $image_name = "";
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label>GSTIN / TAX ID</label>
-                                                                <input type="text"  class="form-control" name="gst_no" id="gst_no" value="<?php echo $challan_number; ?>" placeholder="Enetr GSTIN/TAX ID..">
+                                                                <input type="text"  class="form-control" name="gst_no" id="gst_no" value="<?php echo $gst_no; ?>" placeholder="Enetr GSTIN/TAX ID..">
                                                             </div>
                                                         </div>
 
@@ -432,7 +432,7 @@ $description = $document_path = $image_name = "";
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <label>Email Id</label>
-                                                    <input name="client_email" id="client_email" placeholder="Enter Email id" class="form-control">
+                                                    <input name="client_email" id="client_email" placeholder="Enter Email id" class="form-control" value="<?php echo $client_email;?>">
                                                 </div>
                                             </div>
 
@@ -448,7 +448,7 @@ $description = $document_path = $image_name = "";
                                             <div class="col-sm-3">
                                                 <!-- text input -->
                                                 <div class="form-group">
-                                                    <label> Verify Email Id</label>
+                                                    <label> Enter OTP</label>
                                                     <input name="otp_verify_email" id="otp_verify_email" placeholder="Enter OTP" class="form-control"  required="">
                                                 </div>
                                             </div>
@@ -676,173 +676,50 @@ function invoicedateValidate() {
 
                                                     $('#invoiceForm').validate({
                                                         rules: {
-                                                            txtBuildingName: {
+                                                            first_name: {
                                                                 required: true
                                                             },
-                                                            txtVendorName: {
+                                                            last_name: {
                                                                 required: true
                                                             },
-                                                            cmbBillType: {
+                                                            gender: {
                                                                 required: true
                                                             },
-                                                            cmbChallanNumber: {
+                                                            company_name: {
                                                                 maxlength: 100
                                                             },
-                                                            txtDeliveryLocation: {
+                                                            city: {
                                                                 required: true
                                                             },
-                                                            cmbCompany: {
+                                                            state: {
                                                                 required: true
                                                             },
-                                                            cmbDepartment: {
+                                                            country: {
                                                                 required: true
-                                                            },
-                                                            txtBillNo: {
-                                                                required: true,
-                                                                maxlength: 50
-
-                                                            },
-                                                            txtBidNumber: {
-                                                                maxlength: 50
-                                                            },
-                                                            txtBillDate: {
-                                                                required: true
-                                                            },
-                                                            txtAmount: {
-                                                                required: true
-                                                            },
-                                                            txtPayableAmount: {
-                                                                required: true
-                                                            },
-                                                            cmbBillCategory: {
-                                                                required: true
-                                                            },
-                                                            txtServiceFromDate: {
-                                                                required: function(element) {
-                                                                    if ($('#cmbBillCategory').val() == 'Service') {
-                                                                        return true;
-                                                                    } else {
-                                                                        return false;
-                                                                    } // return $('#cmbBillCategory').val() == 'Service';
-                                                                }
-                                                            },
-                                                            txtAdvanceRequestNo: {
-                                                                required: function(element) {
-                                                                    // var str = $('#txtAdvanceRequestNo').val();
-                                                                    if ($('#cmbBillType').val() == 'IOM') {
-                                                                        return true;
-                                                                    } else {
-                                                                        return false;
-                                                                    } // return $('#cmbBillCategory').val() == 'Service';
-                                                                },
-                                                                maxlength: 200,
-                                                                minlength: 10
-                                                            },
-                                                            txtServiceToDate: {
-                                                                required: function(element) {
-                                                                    return $('#cmbBillCategory').val() == 'Service';
-                                                                }
-                                                            },
-                                                            txtVendorContactPerson: {
-                                                                required: true
-                                                            },
-                                                            txtVendorContactPersonContactNo: {
-                                                                required: true
-                                                            },
-                                                            txtHiranandaniContactPerson: {
-                                                                required: true
-                                                            },
-                                                            txtHiranandaniContactPersonContactNo: {
-                                                                required: true
-                                                            },
-                                                            // txtBillDueDate: {
-                                                            //      required: true
-                                                            //              //   mindateallow : true
-                                                            //  },
-                                                            txtWorkorderNumber: {
-                                                                required: function(element) {
-
-                                                                    if (($('#txtAmount').val() >= 10000) || ($('#cmbBillType').val() == "IOM")) {
-                                                                        return true;
-                                                                    } else {
-                                                                        return false;
-                                                                    }
-                                                                    // return $('#cmbBillCategory').val() == 'Service';
-                                                                },
-                                                                maxlength: 50
                                                             }
                                                         },
                                                         messages: {
-                                                            txtBuildingName: {
-                                                                required: "Please select building"
+                                                            first_name: {
+                                                                required: "Please enter first name"
                                                             },
-                                                            txtVendorName: {
-                                                                required: "Please select Vendor"
+                                                            last_name: {
+                                                                required: "Please enter last name"
                                                             },
-                                                            cmbBillType: {
-                                                                required: "Please select Bill Type"
+                                                            gender: {
+                                                                required: "Please select gender"
                                                             },
-                                                            cmbChallanNumber: {
-                                                                maxlength: "Maximum length is 100"
+                                                            company_name: {
+                                                                required: "Please enter company name"
                                                             },
-                                                            txtDeliveryLocation: {
-                                                                required: "Please select Delivery Location"
+                                                            city: {
+                                                                required: "Please select city"
                                                             },
-                                                            cmbCompany: {
-                                                                required: "Please select company"
+                                                            state: {
+                                                                required: "Please select state"
                                                             },
-                                                            cmbDepartment: {
-                                                                required: "Please select department"
-                                                            },
-                                                            txtBillNo: {
-                                                                required: "Please select bill no"
-                                                            },
-                                                            txtBidNumber: {
-                                                                maxlength: "Maximum length is 50"
-                                                            },
-                                                            txtWorkorderNumber: {
-                                                                required: "PO/WO Required",
-                                                                maxlength: "Maximum length is 50"
-                                                            },
-                                                            txtBillDate: {
-                                                                required: "Please select bill date"
-                                                                        //  invoicedatevalidation: 'Invoice date is not proper'
-                                                            },
-                                                            txtAmount: {
-                                                                required: "Please enter amount"
-                                                            },
-                                                            txtPayableAmount: {
-                                                                required: "Please enter payable amount"
-                                                            },
-                                                            cmbBillCategory: {
-                                                                required: "Please select bill category"
-                                                            },
-                                                            txtServiceFromDate: {
-                                                                required: "Please select service from date"
-                                                            },
-                                                            txtServiceToDate: {
-                                                                required: "Please select service to date"
-                                                            },
-                                                            txtVendorContactPerson: {
-                                                                required: "Please select contact person name"
-                                                            },
-                                                            txtVendorContactPersonContactNo: {
-                                                                required: "Please enter vendor contact person no"
-                                                            },
-                                                            txtHiranandaniContactPerson: {
-                                                                required: "Please enter hiranandani contact person name"
-                                                            },
-                                                            txtHiranandaniContactPersonContactNo: {
-                                                                required: "Please enter hiranandani contact person no"
-                                                            },
-                                                            //  txtBillDueDate: {
-                                                            //        required: "Please select invoice due date",
-                                                            //        //     mindateallow: "Bill due date should greater than invoice date "
-                                                            //    }
-                                                            txtAdvanceRequestNo: {
-                                                                required: "Please enter Advance Request Number"
+                                                            country: {
+                                                                required: "Please select country"
                                                             }
-
                                                         },
                                                         errorElement: 'span',
                                                         errorPlacement: function(error, element) {
@@ -874,10 +751,10 @@ function invoicedateValidate() {
                                                     var mobile = $("#client_mobile").val();
                                                     if (mobile != "") {
                                                         $.ajax({
-                                                            url: 'sendOtp.php',
+                                                            url: 'sendOtpOnMobile.php',
                                                             type: 'get',
                                                             dataType: 'json',
-                                                            data: {'mobile': mobile, 'otp': fourdigitsrandom},
+                                                            data: {'mobile': mobile, 'num': fourdigitsrandom},
                                                             contentType: 'application/json',
                                                             success: function(data) {
                                                                 if (data.status == 'success') {
@@ -903,20 +780,20 @@ function invoicedateValidate() {
 //alert(fourdigitsrandom);
 
 
-                                                    //    var email = $("#txtEncEmail").val();
-                                                    var mobile = $("#client_email").val();
-                                                    if (mobile != "") {
+                                                     var email = $("#client_email").val();
+                                                 //   var mobile = $("#client_email").val();
+                                                    if (email != "") {
                                                         $.ajax({
-                                                            url: 'sendOtp.php',
+                                                            url: 'sendOtpOnEmail.php',
                                                             type: 'get',
                                                             dataType: 'json',
-                                                            data: {'mobile': mobile, 'otp': fourdigitsrandom},
+                                                            data: {'email': email, 'num': fourdigitsrandom},
                                                             contentType: 'application/json',
                                                             success: function(data) {
                                                                 if (data.status == 'success') {
-                                                                    alert("OTP send on your mobile number");
+                                                                    alert("OTP send on your email id.");
                                                                 } else {
-                                                                    alert("Wrong mobile number entered or otp service is not working");
+                                                                    alert("Wrong email id entered or otp service is not working");
                                                                 }
                                                                 //  alert(data.status);
                                                                 // $('#target').html(data.msg);

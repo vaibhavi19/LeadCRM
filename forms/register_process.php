@@ -76,4 +76,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ../register_new.php?error=3");
     }
 }
+
 ?>
+<!--<script>
+   function generateotp() {
+
+                var fourdigitsrandom = Math.floor(1000 + Math.random() * 9000);
+                $("#otp_send").val(fourdigitsrandom);
+//alert(fourdigitsrandom);
+
+
+                //    var email = $("#txtEncEmail").val();
+                var mobile = $("#txtEncMobile").val();
+                if (mobile != "") {
+                    $.ajax({
+                        url: 'forms/sendOtp.php',
+                        type: 'get',
+                        dataType: 'json',
+                        data: {'mobile': mobile, 'otp': fourdigitsrandom},
+                        contentType: 'application/json',
+                        success: function(data) {
+                            if (data.status == 'success') {
+                                alert("OTP send on your mobile number");
+                            } else {
+                                alert("Wrong mobile number entered or otp service is not working");
+                            }
+                            //  alert(data.status);
+                            // $('#target').html(data.msg);
+                        }
+                        //   data: JSON.stringify(person)
+                    });
+
+                } else {
+                    alert("Please fill the data");
+                }
+
+            }
+            
+</script>-->

@@ -74,13 +74,13 @@
                             <input type="text" name="txtEncMobile" maxlength="10" id="txtEncMobile" class="form-control" placeholder="Mobile" autocomplete="off">
                         </div>
 
-                        <div class="form-group">
+<!--                        <div class="form-group">
                             <button type="button" name="generate_otp" id="generate_otp" class="col-md-12 btn btn-primary" onclick="generateotp()">Generate OTP</button>
                         </div>
   <div class="form-group">
                             <input type="password" name="otp_verify" id="otp_verify" class="form-control" placeholder="Enter OTP" autocomplete="off">
 
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" autocomplete="off">
 
@@ -128,39 +128,40 @@
         <script src="plugins/jquery-validation/additional-methods.min.js"></script>
         <script language="javascript" type="text/javascript">
 
-            function generateotp() {
-
-                var fourdigitsrandom = Math.floor(1000 + Math.random() * 9000);
-                $("#otp_send").val(fourdigitsrandom);
-//alert(fourdigitsrandom);
-
-
-                //    var email = $("#txtEncEmail").val();
-                var mobile = $("#txtEncMobile").val();
-                if (mobile != "") {
-                    $.ajax({
-                        url: 'forms/sendOtp.php',
-                        type: 'get',
-                        dataType: 'json',
-                        data: {'mobile': mobile, 'otp': fourdigitsrandom},
-                        contentType: 'application/json',
-                        success: function(data) {
-                            if (data.status == 'success') {
-                                alert("OTP send on your mobile number");
-                            } else {
-                                alert("Wrong mobile number entered or otp service is not working");
-                            }
-                            //  alert(data.status);
-                            // $('#target').html(data.msg);
-                        }
-                        //   data: JSON.stringify(person)
-                    });
-
-                } else {
-                    alert("Please fill the data");
-                }
-
-            }
+//            function generateotp() {
+//
+//                var fourdigitsrandom = Math.floor(1000 + Math.random() * 9000);
+//                $("#otp_send").val(fourdigitsrandom);
+////alert(fourdigitsrandom);
+//
+//
+//                //    var email = $("#txtEncEmail").val();
+//                var mobile = $("#txtEncMobile").val();
+//                if (mobile != "") {
+//                    $.ajax({
+//                        url: 'forms/sendOtp.php',
+//                        type: 'get',
+//                        dataType: 'json',
+//                        data: {'mobile': mobile, 'otp': fourdigitsrandom},
+//                        contentType: 'application/json',
+//                        success: function(data) {
+//                            if (data.status == 'success') {
+//                                alert("OTP send on your mobile number");
+//                            } else {
+//                                alert("Wrong mobile number entered or otp service is not working");
+//                            }
+//                            //  alert(data.status);
+//                            // $('#target').html(data.msg);
+//                        }
+//                        //   data: JSON.stringify(person)
+//                    });
+//
+//                } else {
+//                    alert("Please fill the data");
+//                }
+//
+//            }
+//            
             $(document).ready(function() {
 
 
@@ -189,10 +190,10 @@
                         txtEncMobile: {
                             required: true
                         },
-                        otp_verify: {
-                            required: true,
-                            equalTo: "#otp_send"
-                        },
+//                        otp_verify: {
+//                            required: true,
+//                            equalTo: "#otp_send"
+//                        },
                         conpassword:{
                               required: true,
                             equalTo: "#password"
@@ -211,10 +212,10 @@
                         txtEncMobile: {
                             required: "Please enter mobile"
                         },
-                        otp_verify: {
-                            required: "Please enter OTP",
-                            equalTo: "Incorrect OTP"
-                        },
+//                        otp_verify: {
+//                            required: "Please enter OTP",
+//                            equalTo: "Incorrect OTP"
+//                        },
                         conpassword:{
                              required: "Please enter password",
                             equalTo: "Password does not match"
