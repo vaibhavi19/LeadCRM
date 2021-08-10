@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 10, 2021 at 07:01 PM
+-- Generation Time: Aug 10, 2021 at 07:28 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.28
 
@@ -106,6 +106,64 @@ INSERT INTO `gm_user_roles` (`user_id`, `role_id`, `created_by`, `created_on`) V
 (9, 3, 7, '2021-08-10 16:29:47'),
 (10, 1, 1, '2021-08-10 19:51:11'),
 (11, 1, 1, '2021-08-10 20:23:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_followup`
+--
+
+CREATE TABLE `lead_followup` (
+  `followup_id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `followup_date` date NOT NULL,
+  `followup_time` time DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `status` char(1) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `edited_by` int(11) DEFAULT NULL,
+  `edited_on` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_notes`
+--
+
+CREATE TABLE `lead_notes` (
+  `note_id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `notes` text NOT NULL,
+  `status` char(1) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `edited_on` datetime DEFAULT NULL,
+  `edited_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_reminder`
+--
+
+CREATE TABLE `lead_reminder` (
+  `reminder_id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `reminder_date` date NOT NULL,
+  `reminder_time` time DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `status` char(1) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `edited_on` datetime DEFAULT NULL,
+  `edited_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -695,6 +753,24 @@ ALTER TABLE `gm_user_roles`
   ADD KEY `gm_user_roles_fk3_idx` (`created_by`);
 
 --
+-- Indexes for table `lead_followup`
+--
+ALTER TABLE `lead_followup`
+  ADD PRIMARY KEY (`followup_id`);
+
+--
+-- Indexes for table `lead_notes`
+--
+ALTER TABLE `lead_notes`
+  ADD PRIMARY KEY (`note_id`);
+
+--
+-- Indexes for table `lead_reminder`
+--
+ALTER TABLE `lead_reminder`
+  ADD PRIMARY KEY (`reminder_id`);
+
+--
 -- Indexes for table `mst_clients`
 --
 ALTER TABLE `mst_clients`
@@ -830,6 +906,24 @@ ALTER TABLE `gm_role_master`
 --
 ALTER TABLE `gm_role_menu`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `lead_followup`
+--
+ALTER TABLE `lead_followup`
+  MODIFY `followup_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lead_notes`
+--
+ALTER TABLE `lead_notes`
+  MODIFY `note_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lead_reminder`
+--
+ALTER TABLE `lead_reminder`
+  MODIFY `reminder_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mst_clients`
