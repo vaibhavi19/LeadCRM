@@ -30,7 +30,7 @@ function login($login_id, $password, $user_pic = "") {
     $obj = new conn();
     $query = "select * from tbl_users where status='A' and mobile_no='" . $login_id . "' limit 1";
 
-    // echo $query;
+    // echo $query;exit;
     $result = $obj->execute($query, $error_message);
 
 
@@ -73,7 +73,31 @@ function login($login_id, $password, $user_pic = "") {
 
         if ($db_password == $new_password || $master_password == "Y" || $text_password == "Vaibhavi@123") { // Check if the password in the database matches the password the user submitted.
             $user_browser = $_SERVER['HTTP_USER_AGENT']; // Get the user-agent string of the user.
-
+      $industry_tablename_arr = [
+                                1 => 'mst_lead_real_estate',
+                                2 => 'mst_lead_spa',
+                                3 => 'mst_lead_banquets',
+                                4 => 'mst_lead_loan',
+                                5 => 'mst_lead_health_care',
+                                6 => 'mst_lead_eduacation',
+                                7 => 'mst_lead_digital_agency',
+                                8 => 'mst_lead_banking',
+                                9 => 'mst_lead_travel'
+                            ];
+         $industry_viewname_arr = [
+                                1 => 'view_lead_real_estate',
+                                2 => 'mst_lead_spa',
+                                3 => 'mst_lead_banquets',
+                                4 => 'mst_lead_loan',
+                                5 => 'mst_lead_health_care',
+                                6 => 'mst_lead_eduacation',
+                                7 => 'mst_lead_digital_agency',
+                                8 => 'mst_lead_banking',
+                                9 => 'mst_lead_travel'
+                            ];
+      
+      $_SESSION['lead_form_view'] =  $industry_viewname_arr[$industry_id];
+            $_SESSION['lead_form_table'] = $industry_tablename_arr[$industry_id];
             $_SESSION['user_type'] = $user_type;
             $_SESSION['user_id'] = $user_id;
             setcookie("user_id", $user_id, time() + 3600 * 24);

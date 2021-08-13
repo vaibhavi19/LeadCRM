@@ -3,6 +3,10 @@ include('header.php');
 $obj = new conn();
 $hierarchy_assign_list = $obj->get_execute_scalar("SELECT GROUP_CONCAT(hierarchy_user_id) as hierarchy_list FROM `gm_user_hierarchy` WHERE user_id=" . $_SESSION['user_id'], $error_message);
 
+  $_SESSION['forwarded_date_from'] = "";
+        $_SESSION['forwarded_date_to'] = "";
+        $_SESSION['vendor_name'] = "";
+        $_SESSION['forwarded_by_id'] = "";
 
 
 $comment = "";
@@ -163,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function get_condition() {
 
     global $forwarded_by_font_color, $vendor_name_font_color, $forwarded_from_date_font_color, $forwarded_to_date_font_color;
-
+global $stage_id,$source_id;
 //    echo "<pre>";
 //    print_r($_POST);
 //    exit;
@@ -171,27 +175,29 @@ function get_condition() {
     $_SESSION['forwarded_date_to'] = isset($_POST['txtForwardedDateTo']) ? $_POST['txtForwardedDateTo'] : $_SESSION['forwarded_date_to'];
     $_SESSION['txtSource'] = isset($_POST['txtSource']) ? $_POST['txtSource'] : $_SESSION['txtSource'];
     $_SESSION['txtLeadStatus'] = (isset($_POST['txtLeadStatus'])) ? $_POST['txtLeadStatus'] : $_SESSION['txtLeadStatus'];
-
+ $stage_id = isset($_POST['txtLeadStatus'])?$_POST['txtLeadStatus']:"";
+ 
+         $source_id = isset($_POST['txtSource'])?$_POST['txtSource']:"";
     $condition = $condition1 = $condition2 = $condition3 = "";
 
     // BILL FROM DATE AND TO DATE
     if ($_SESSION['forwarded_date_from'] != "" && $_SESSION['forwarded_date_to'] != "") {
-        $condition1 .= " and date(b.forwarded_on) between " . replaceDate($_SESSION['forwarded_date_from']) . " and  " . replaceDate($_SESSION['forwarded_date_to']) . "";
+        $condition1 .= " and date(a.created_on) between " . replaceDate($_SESSION['forwarded_date_from']) . " and  " . replaceDate($_SESSION['forwarded_date_to']) . "";
     } else {
         $condition1 = "";
     }
 
-      
-        if ($_SESSION['txtSource'] != "") {
-            $condition2 .= " and a.source_id = '" . ($_SESSION['txtSource']) . "'";
-        }else{
-            $condition2 = "";
-        }
-        if ($_SESSION['txtLeadStatus'] != "") {
-            $condition3 .= " and a.lead_status in (" . $_SESSION['txtLeadStatus'] . ") ";
-        }else{
-            $condition3 = "";
-        }
+
+    if ($_SESSION['txtSource'] != "") {
+        $condition2 .= " and a.source_id = '" . ($_SESSION['txtSource']) . "'";
+    } else {
+        $condition2 = "";
+    }
+    if ($_SESSION['txtLeadStatus'] != "") {
+        $condition3 .= " and a.stage_id in (" . $_SESSION['txtLeadStatus'] . ") ";
+    } else {
+        $condition3 = "";
+    }
 
     $condition = $condition1 . "" . $condition2 . "" . $condition3;
 //    $forwarded_from_date_font_color = $_SESSION['forwarded_date_from'] != "" ? "class='flashit'" : "";
@@ -238,10 +244,10 @@ function get_condition() {
                                         <div class="form-group">
                                             <label <?php echo $forwarded_by_font_color; ?>>Source</label>
                                             <select class="form-control select2bs4" style="width: 100%;" name="txtSource" id="txtSource">
-<?php
-$query = "SELECT source_id ,source_name  FROM `mst_sources`";
-echo $obj->fill_combo($query, $source_id, false);
-?>
+                                                <?php
+                                                $query = "SELECT source_id ,source_name  FROM `mst_sources`";
+                                                echo $obj->fill_combo($query, $source_id, false);
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -250,10 +256,10 @@ echo $obj->fill_combo($query, $source_id, false);
                                         <div class="form-group">
                                             <label <?php echo $vendor_name_font_color; ?>>Lead Status</label>
                                             <select class="form-control select2bs4" style="width: 100%;" name="txtLeadStatus" id="txtLeadStatus">
-<?php
-$query = "select stage_id,stage_name from mst_lead_stages";
-echo $obj->fill_combo($query, $stage_id, false);
-?>
+                                                <?php
+                                                $query = "select stage_id,stage_name from mst_lead_stages";
+                                                echo $obj->fill_combo($query, $stage_id, false);
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -314,22 +320,22 @@ echo $obj->fill_combo($query, $stage_id, false);
                                         <div class="form-group">
                                             <!--                                            <label>Forword To</label>-->
                                             <select class="form-control" name="cmbForwardTo" id="cmbForwardTo" >
-<?php
-$query = "select concat(cast(user_id as char),'~',user_name,'~',email_id) , upper(user_name) as user_name ";
-$query = $query . " from tbl_users where status = 'A' and created_by=" . replaceBlank($_SESSION['user_id']) . " and user_type='U' ";
+                                                <?php
+                                                $query = "select concat(cast(user_id as char),'~',user_name,'~',email_id) , upper(user_name) as user_name ";
+                                                $query = $query . " from tbl_users where status = 'A' and created_by=" . replaceBlank($_SESSION['user_id']) . " and user_type='U' ";
 
-$query = $query . " order by user_name ";
+                                                $query = $query . " order by user_name ";
 
-echo $obj->fill_combo($query, $user_id, false, 'Select');
-?>
+                                                echo $obj->fill_combo($query, $user_id, false, 'Select');
+                                                ?>
                                             </select>
-                                                <?php echo show_validation_message('val_cmbForwardTo', 'Please select Forward to user.'); ?>
+                                            <?php echo show_validation_message('val_cmbForwardTo', 'Please select Forward to user.'); ?>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <input type="text" name="txtComment" id="txtComment" class="form-control" required placeholder="Enter Remark" value="<?php echo $comment; ?>">
-                                            &nbsp;<?php //echo "<b><font size=3>Total Count    : " . $total_count . "</font></b>";      ?>    
+                                            &nbsp;<?php //echo "<b><font size=3>Total Count    : " . $total_count . "</font></b>";          ?>    
                                         </div>  
                                     </div>
                                     <div class="col-sm-4">
@@ -350,144 +356,69 @@ echo $obj->fill_combo($query, $user_id, false, 'Select');
                                     <thead>
                                         <tr>
                                             <th>
-                                                #
-                                            </th>
-                                            <th>
-                                                Type
-                                            </th>
-
-                                            <th>
                                                 <input name="empty" id="empty" onclick="CheckAll(this);" type="checkbox">
                                             </th>
-
-                                            <th>BTS No</th>
-
-<?php
-if ($_SESSION['user_id'] == "146") {
-    echo " <th>SES No.</th>";
-}
-?>
-                                            <th> Forwarded By</th>
-                                            <th>Vendor</th>
-                                            <th> Bill No</th> 
-                                            <th> Bill Date</th>
-                                            <th> Amount</th>
-                                            <th> Company</th>
-                                            <th> Status</th>
-                                            <th> Activity Desc</th>
-                                            <th> Remarks</th>
-                                            <th> Forwarded On</th>
-                                            <th> Building</th>
-                                            <th>Reject</th>
-                                            <th>Update</th>
-<?php if ($_SESSION['user_id'] == '111' || $_SESSION['user_id'] == '1454' || $_SESSION['user_id'] == '1455' || $_SESSION['user_id'] == '1457' || $_SESSION['user_id'] == '2049' || $_SESSION['user_id'] == '2004') { ?>
-                                                <th>Change Status</th>
-                                            <?php } ?>
+                                            <th>SR.NO</th>
+                                            <th>Lead ID</th>
+                                            <th> Client Name</th>
+                                             <th> Display Name</th>
+                                            <th>Mobile Number</th>
+                                            <th>Whatsapp Number</th> 
+                                            <th> Email</th>
+                                            <th> Flat type</th>
+                                            <th> Flat Size</th>
+                                            <th> Project Type</th>
+                                            <th> Property Type</th>
+                                            <th> Area</th>
+                                            <th> Location</th>
+                                            <th> Budget</th>
+                                             <th> Status</th>
+                                             
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
-<?php
+                                        <?php
+                                        if ($_SESSION['lead_form_table'] != "") {
+                                          $listview_sql = "select * from " . $_SESSION['lead_form_view'] . " a  where 1=1 and a.user_id=" . $_SESSION['user_id'] . $condition;
+                                     // $listview_sql = "SELECT * FROM `view_lead_real_estate`  a  where 1=1 and a.user_id=" . $_SESSION['user_id'] . $condition;
+                                            } else {
+                                            $listview_sql = "select * from mst_lead a  where 1=1 and a.user_id=" . $_SESSION['user_id'] . $condition;
+                                        }
+//echo $listview_sql;exit;
+                                        $result = $obj->execute($listview_sql, $error_message);
+                                        $row_count = $row_total = 0;
 
-$listview_sql = "select * from mst_lead a left join trn_lead_assignment b on a.lead_id = b.lead_id where 1=1  $condition";
-//$listview_sql = " select a.bill_id,a.building_name,concat(left(a.bts_number,4),'-',right(a.bts_number,4)) as bts_number,a.bts_number as 'bts_number_asitis',department_id,department_name,bill_number,date_format(bill_date,'%d-%b-%y') as bill_date,date_format(bill_due_date,'%d-%b-%y') as bill_due_date, ";
-//$listview_sql = $listview_sql . " amount,approved_amount, currency,currency_desc,a.company_id,company_name,vendor_name,remarks,activity_description,";
-//$listview_sql = $listview_sql . " a.status,status_desc,a.created_by,c.user_name as 'forwarded_by' ,b.forwarded_on,  created_by_name,a.created_on, a.edited_by,a.total_comments,";
-//$listview_sql = $listview_sql . " edited_by_name,a.edited_on,ses_no, bill_type";
-//$listview_sql = $listview_sql . " from view_mst_bills  a join trn_bills_transactions b on a.bill_id = b.bill_id ";
-//$listview_sql = $listview_sql . " join gm_user_master c on b.created_by = c.user_id";
-//$listview_sql = $listview_sql . " and b.forwarded_to = '" . $_SESSION["user_id"] . "' ";
-//$listview_sql = $listview_sql . " and b.status = 'P' and a.status in ('F') $condition  order by b.forwarded_on asc";
-// echo $listview_sql;
-// echo $listview_sql;exit;
-$result = $obj->execute($listview_sql, $error_message);
-$row_count = $row_total = 0;
+                                        if ($result) {
+                                            while ($row = mysqli_fetch_array($result)) {
+                                             //   echo "<pre>"; print_r($row);exit;
+                                                // $row_total = $row_total + $row['amount'];
+                                                echo "<tr id=\"tr_" . $row['lead_id'] . "\" onclick=\"OnClickRow(this.id, 'chk_" . $row['lead_id'] . "');\">";
+                                                echo "<td><input id=\"chk_" . $row['lead_id'] . "\"  type=\"checkbox\" class=\"chk_class\" name=\"chk[]\" value=" . $row['lead_id'] . "></td>";
+                                                echo "<td>" . ($row_count + 1) . "</td>";
+                                                echo "<td>" . $row['lead_id'] . "</td>";
+                                                echo "<td>" . $row['client_name'] . "</td>";
+                                                echo "<td>" . $row['display_name'] . "</td>";
+                                                echo "<td>" . $row['mobile_number'] . "</td>";
+                                                echo "<td>" . $row['whatsapp_number'] . "</td>";
+                                                echo "<td>" . $row['email_id'] . "</td>";
+                                                echo "<td>" . $row['flat_type'] . "</td>";
+                                                echo "<td>" . $row['flat_size'] . "</td>";
+                                                echo "<td>" . $row['project_type'] . "</td>";
+                                                echo "<td>" . $row['property_type'] . "</td>";
+                                                echo "<td>" . $row['area'] . "</td>";
+                                                echo "<td>" . $row['location'] . "</td>";
+                                                echo "<td>" . $row['budget'] . "</td>";
+                                                echo "<td><a href=\"tran_bill_reject.php?lead_id=" . $row['lead_id'] . "&type=ib\" target=\"_self\">Reject Bill</td>";
+                                                echo "</tr>";
+                                                $row_count++;
+                                            }
 
-if ($result) {
-    while ($row = mysqli_fetch_array($result)) {
-        $row_total = $row_total + $row['amount'];
-        echo "<tr id=\"tr_" . $row['bill_id'] . "\" onclick=\"OnClickRow(this.id, 'chk_" . $row['bill_id'] . "');\">";
-        echo "<td>" . ($row_count + 1) . "</td>";
-        printf("<td>%s</td>", $row['bill_type']);
-        if ($_SESSION['two_factor_auth'] != 'Y') {
-            echo "<td><input id=\"chk_" . $row['bill_id'] . "\"  type=\"checkbox\" class=\"chk_class\" name=\"chk[]\" value=" . $row['bill_id'] . "></td>";
-        }
-        echo "<td><a href=\"rpt_bill_track.php?bill_id=" . $row['bill_id'] . "\" target=\"_blank\">" . $row['bts_number'] . "</td>";
-
-
-        if ($_SESSION['user_id'] == "146") {
-            echo "<td>" . $row['ses_no'] . "</td>";
-        }
-
-
-
-        //    "<input type=\"hidden\" id=\"txtbtsnumber_" . $row['bill_id'] . "\" name=\"txtbtsnumber_" . $row['bill_id'] . "\" value=\"" . $row['bts_number'] . "\"></td>";
-        //printf("<td>%s</td>", $row['bts_number']);
-        // echo "<td><a href=\"tran_bill_comments.php?bill_id=" . $row['bill_id'] . "\" target=\"main\"><img width=\"16px\" height=\"16px\" src=\"..\img\comment.png\">" . $row['total_comments'] . "</td>";
-        printf("<td>%s</td>", $row['forwarded_by']);
-        if ($_SESSION['two_factor_auth'] == 'Y') {
-            echo "<td><a  href=rpt_bill_preview.php?bill_id=" . $row['bill_id'] . "&rurl=i>" . $row['vendor_name'] . "</a><input type=\"hidden\" id=\"txtvendorname_" . $row['bill_id'] . "\" name=\"txtvendorname_" . $row['bill_id'] . "\" value=\"" . $row['vendor_name'] . "\" \"></td>";
-        } else {
-            echo "<td>" . $row['vendor_name'] . "</td>";
-        }
-
-//                                                if ($row['user_type'] == "VENDOR") {
-//                                                    printf("<td><font color=blue>%s</font></td>", $row['vendor_name']);
-//                                                } else {
-//                                                    printf("<td>%s</td>", $row['vendor_name']);
-//                                                }
-        printf("<td>%s</td>", $row['bill_number']);
-        printf("<td>%s</td>", $row['bill_date']);
-        printf("<td>%s</td>", $row['amount']);
-        printf("<td>%s</td>", $row['company_name']);
-        //  printf("<td>%s</td>", $row['department_name']);
-
-        printf("<td>%s</td>", $row['status_desc']);
-        printf("<td>%s</td>", $row['activity_description']);
-        printf("<td>%s</td>", $row['remarks']);
-
-        printf("<td>%s</td>", date('d-M-y h:i A', strtotime($row['forwarded_on'])));
-        printf("<td>%s</td>", $row['building_name']);
-
-
-//                                                echo "<td><a href=\"tran_bill_close.php?bill_id=" . $row['bill_id'] . "\" target=\"_self\">Close Bill</td>";
-        echo "<td><a href=\"tran_bill_reject.php?bill_id=" . $row['bill_id'] . "&type=ib\" target=\"_self\">Reject Bill</td>";
-
-        echo "<td><a href=\"master_bills_approve.php?bill_id=" . $row['bill_id'] . "&rurl=i\" target=\"_self\">Update Bill</td>";
-
-        if ($_SESSION['user_id'] == '111' || $_SESSION['user_id'] == '1454' || $_SESSION['user_id'] == '1455' || $_SESSION['user_id'] == '1457' || $_SESSION['user_id'] == '2049' || $_SESSION['user_id'] == '2004') {
-            echo "<td><a href=\"rpt_bill_status_change.php?bill_id=" . $row['bill_id'] . "\" target=\"_self\">Change Bill Status</td>";
-        }
-
-
-
-
-        printf("<input type=\"hidden\" id=\"txtbtsnumber_" . $row['bill_id'] . "\" name=\"txtbtsnumber_" . $row['bill_id'] . "\" value=\"" . $row['bts_number'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtdepartment_" . $row['bill_id'] . "\" name=\"txtdepartment_" . $row['bill_id'] . "\" value=\"" . $row['department_name'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtbillno_" . $row['bill_id'] . "\" name=\"txtbillno_" . $row['bill_id'] . "\" value=\"" . $row['bill_number'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtbilldate_" . $row['bill_id'] . "\" name=\"txtbilldate_" . $row['bill_id'] . "\" value=\"" . date('d-M-y', strtotime($row['bill_date'])) . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtbillduedate_" . $row['bill_id'] . "\" name=\"txtbillduedate_" . $row['bill_id'] . "\" value=\"" . date('d-M-y', strtotime($row['bill_due_date'])) . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtamount_" . $row['bill_id'] . "\" name=\"txtamount_" . $row['bill_id'] . "\" value=\"" . $row['amount'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtcurrencydesc_" . $row['bill_id'] . "\" name=\"txtcurrencydesc_" . $row['bill_id'] . "\" value=\"" . $row['currency_desc'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtcompanyname_" . $row['bill_id'] . "\" name=\"txtcompanyname_" . $row['bill_id'] . "\" value=\"" . $row['company_name'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtvendorname_" . $row['bill_id'] . "\" name=\"txtvendorname_" . $row['bill_id'] . "\" value=\"" . $row['vendor_name'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtstatusdesc_" . $row['bill_id'] . "\" name=\"txtstatusdesc_" . $row['bill_id'] . "\" value=\"" . $row['status_desc'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtforwardedby_" . $row['bill_id'] . "\" name=\"txtcreatedbyname_" . $row['bill_id'] . "\" value=\"" . $row['created_by_name'] . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtforwardedon_" . $row['bill_id'] . "\" name=\"txtcreatedon_" . $row['bill_id'] . "\" value=\"" . date('d-M-y h:i A', strtotime($row['created_on'])) . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtRemarks_" . $row['bill_id'] . "\" name=\"txtRemarks_" . $row['bill_id'] . "\" value=\"" . date('d-M-y h:i A', strtotime($row['remarks'])) . "\" \">");
-        printf("<input type=\"hidden\" id=\"txtBuiding_" . $row['bill_id'] . "\" name=\"txtBuiding_" . $row['bill_id'] . "\" value=\"" . $row['building_name'] . "\" \">");
-
-        echo "</tr>";
-        $row_count++;
-    }
-//                                    if ($row_count != 0) {
-//                                        printf("<tr><td></td><td colspan=5><b>Total :</b></td><td><b>" . number_format($row_total, "2") . "</b></td><td colspan=\"8\"></td></tr>");
-//                                        mysqli_free_result($result);
-//                                    }
-}
-if ($row_count == 0) {
-    //   printf("<tr><td colspan=12><b>No data found!</b></td></tr>");
-}
-?>
+                                        }
+                                        if ($row_count == 0) {
+                                            //   printf("<tr><td colspan=12><b>No data found!</b></td></tr>");
+                                        }
+                                        ?>
 
                                     <input type="hidden" name="txtPKey" id="txtPKey" value="<?PHP echo $txtPKey; ?>"/>
                                 </table>

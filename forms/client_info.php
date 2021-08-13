@@ -346,7 +346,7 @@ $description = $document_path = $image_name = "";
 
 
                                                     <div class="card-footer">
-                                                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Raise Invoice</button>
+                                                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Create Account</button>
                                                         <button type="submit" id="btnClose" name="btnClose" class="btn btn-danger" formnovalidate>Go Back</button>
 
                                                         <!--                                                        <a id="btnClose" name="btnClose"  class="btn btn-danger">Go Back</a>-->

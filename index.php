@@ -41,7 +41,8 @@
 
         <div class="login-box">
             <div class="login-logo">
-                <a href="#"><b>Welcome to WIN CRM</b></a>
+<!--                <a href="#"><b>Welcome to WIN CRM</b></a>-->
+                <img src="dist/img/leadcrm_logo.jpeg" style="height: 100px;width: 358px;">
             </div>
             <!-- /.login-logo -->
             <div class="card">

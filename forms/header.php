@@ -42,11 +42,45 @@ $username = $_SESSION['user_name'];
         <!-- Google Font: Source Sans Pro -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     </head>
+     <style>
+        .flashit{
+            color:#9a0c1a;
+            font-weight: bold;
+            font-size: large;
+            -webkit-animation: flash linear 1s infinite;
+            animation: flash linear 1s infinite;
+        }
+        @-webkit-keyframes flash {
+            0% { opacity: 1; } 
+            50% { opacity: .1; } 
+            100% { opacity: 1; }
+        }
+        @keyframes flash {
+            0% { opacity: 1; } 
+            50% { opacity: .1; } 
+            100% { opacity: 1; }
+        }
+        /* Pulse class and keyframe animation */
+        .pulseit{
+            -webkit-animation: pulse linear .5s infinite;
+            animation: pulse linear .5s infinite;
+        }
+        @-webkit-keyframes pulse {
+            0% { width:200px; } 
+            50% { width:340px; } 
+            100% { width:200px; }
+        }
+        @keyframes pulse {
+            0% { width:200px; } 
+            50% { width:340px; } 
+            100% { width:200px; }
+        }
+    </style>
     <body class="sidebar-mini layout-fixed sidebar-collapse">
         <div class="wrapper">
 
             <!-- Navbar -->
-            <nav class="main-header navbar navbar-expand navbar-dark navbar-warning" style="background-color:#752676;">
+            <nav class="main-header navbar navbar-expand navbar-dark navbar-warning" style="background-color:#0077b5;">
 <!--                #1f4290;-->
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
@@ -54,12 +88,12 @@ $username = $_SESSION['user_name'];
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="main_new.php" class="nav-link">Dashboard</a>
+                        <a href="dashboard.php" class="nav-link">Dashboard</a>
                     </li>
                 
                 </ul>
                 <ul class="navbar-nav ml-auto">
-<!--                    <img src="../dist/img/crm1.png" alt="AdminLTE Logo" height="60px" width="60px" class="brand-image img-bordered-sm elevation-4">-->
+                    <img src="../dist/img/leadcrm_logo.jpeg" alt="AdminLTE Logo" height="63px" width="200px" class="brand-image img-bordered-sm elevation-4">
                 </ul>
 
             </nav>
@@ -68,10 +102,8 @@ $username = $_SESSION['user_name'];
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar elevation-4 sidebar-light-primary">
                 <!-- Brand Logo -->
-                <a href="main_new.php" class="brand-link">Lead
-<!--                    <img src="../dist/img/crm.jpg" alt="AdminLTE Logo" class="brand-image img-bordered-sm elevation-3"
-                         style="opacity: .8">-->
-                    <span class="brand-text font-weight-light"><b>CRM</b></span>
+                <a href="dashboard.php" class="brand-link" style="color: #42bac3;font-family: fantasy;">WINCRM
+<!--                    <span class="brand-text font-weight-light"><b>CRM</b></span>-->
                 </a>
 
                 <!-- Sidebar -->

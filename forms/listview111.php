@@ -8,20 +8,6 @@ $multiselect = isset($_GET['ms']) ? $_GET['ms'] : "";
 $query = "SELECT description, sql_text FROM sys_listviews WHERE view_id = '" . $listview_id . "'";
 
 //SELECT a.company_id as `ID`, a.company_name as `Company`, case when a.status ='A' then 'Enabled' else 'Disabled' end as Status, date_format(a.created_on,'%d-%b-%Y') as 'Created On', b.user_name as 'Created By' FROM mst_company a join gm_user_master b on a.created_by = b.user_id
-$industry_tablename_arr = [
-    1 => 'mst_lead_real_estate',
-    2 => 'mst_lead_spa',
-    3 => 'mst_lead_banquets',
-    4 => 'mst_lead_loan',
-    5 => 'mst_lead_health_care',
-    6 => 'mst_lead_eduacation',
-    7 => 'mst_lead_digital_agency',
-    8 => 'mst_lead_banking',
-    9 => 'mst_lead_travel'
-];
-
-$industry_id = $_SESSION['industry_id'];
-
 $obj = new conn();
 $result = $obj->execute($query, $error_message);
 
@@ -30,9 +16,9 @@ if (($result) || (mysqli_errno() == 0)) {
     $listview_caption = $row['description'];
     $listview_sql = $row['sql_text'];
     $listview_sql = str_replace("_SESSION_USER_ID", $_SESSION['user_id'], $listview_sql);
-    if($listview_id == 1){
-        $listview_sql = str_replace("_SESSION_TABLE", $industry_tablename_arr[$industry_id], $listview_sql);
-    }
+     $listview_sql = str_replace("_CLIENT_ID", $_SESSION['client_id'], $listview_sql);
+    
+    //echo $listview_sql;exit;
    
 } else {
     echo "Invalid view ID, no such view found in the table.";

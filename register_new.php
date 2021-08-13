@@ -1,23 +1,40 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Card Desk</title>
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WINCrm - All in one Lead Management & Automation Solutions">
+    <meta name="author" content="Mukesh Mamtora">
+    <title>WinCrm - Register With Us</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="img/fav.png" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="img/fav.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/fav.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="img/fav.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="img/fav.png">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- BASE CSS -->
+<!--    <link href="outer/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="outer/css/vendors.css" rel="stylesheet">
+    <link href="outer/css/style.css" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="outer/css/custom.css" rel="stylesheet">
+    
+         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- icheck bootstrap -->
         <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/adminlte.min.css">
-        <!-- Google Font: Source Sans Pro -->
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    </head>
+</head>
     <?php
     include_once 'sys/generalx.php';
     $obj = new conn();
@@ -37,20 +54,48 @@
         //echo $error_text;exit;
     }
     ?>
-    <body class="hold-transition login-page" data-background="url(img/bg6.jpg)">
-
-        <div class="login-box">
-            <div class="login-logo">
-<!--                <a href="#"><b>Welcome to WIN CRM</b></a>-->
-                  <img src="dist/img/leadcrm_logo.jpeg" style="height: 100px;width: 358px;">
-            </div>
-            <!-- /.login-logo -->
-            <div class="card">
-                <div class="card-body">
-                    <p class="login-box-msg">Register Here</p>
-
-
-                    <form  action="forms/register_process.php" method="post" name="register_form" id="register_form"  autocomplete="off">
+<body class="background-image" data-background="url(img/bg6.jpg)" class="hold-transition login-page">
+	
+<!--	<div id="preloader">
+		<div data-loader="circle-side"></div>
+	</div> /Preload -->
+	
+	<div class="panel">
+	    <aside>
+	        <figure>
+            <a href="#0"><img src="outer/img/logo-1.png" width="100%" height="100%" alt=""></a>
+	        </figure>
+<!--	        <form class="input_style_1" method="post">
+			    <div class="form-group">
+			        <label for="full_name">Full Name</label>
+			        <input type="text" name="full_name" id="full_name" class="form-control">
+			    </div>
+				  <div class="form-group">
+			        <label for="full_name">Mobile No</label>
+			        <input type="text" name="mobile_no" id="full_name" class="form-control">
+			    </div>
+			    <div class="form-group">
+			        <label for="email_address">Email Address</label>
+			        <input type="email" name="email_address" id="email_address" class="form-control">
+			    </div>
+			    <div class="form-group">
+			        <label for="password1">Password</label>
+			        <input type="password" name="password1" id="password1" class="form-control">
+			    </div>
+			    <div class="form-group">
+			        <label for="password2">Confirm Password</label>
+			        <input type="password" name="password2" id="password2" class="form-control">
+			    </div>
+			    <div id="pass-info" class="clearfix"></div>
+			    <div class="mb-4">
+			        <label class="container_check">I agree to the <a href="#" data-toggle="modal" data-target="#terms-txt">Terms and Privacy Policy</a>.
+			            <input type="checkbox">
+			            <span class="checkmark"></span>
+			        </label>
+			    </div>
+			    <button type="submit" class="btn_1 full-width">Sign Up</button>
+			</form>-->
+                   <form  action="forms/register_process.php" method="post" name="register_form" id="register_form"  autocomplete="off">
                         <input type="hidden" id="otp_send" name="otp_send" value="">
                         <div class="form-group">
                             <select name="industry_name" id="industry_name" class="form-control">
@@ -107,19 +152,53 @@
                             <a href="index.php" class="btn btn-warning col-md-12">Already Registered? Please login</a>
                         </div>
                     </form>
+                
+	        <p class="text-center mt-3">Already have an account? <a href="#0">Sign In</a></p>
+	        <form class="input_style_1" method="post">
+	            <div id="forgot_pw">
+	                <div class="form-group">
+	                    <label for="email_forgot">Login email</label>
+	                    <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+	                </div>
+	                <p>You will receive an email containing a link allowing you to reset your password to a new preferred one.</p>
+	                <div class="text-center"><input type="submit" value="Reset Password" class="btn_1"></div>
+	            </div>
+	        </form>
+	        <div class="copy">© 2021 WinCrm - All Rights Reserved.</div>
+	    </aside>
+	</div>
+	<!-- /panel -->
 
+	<!-- Modal terms -->
+	<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="termsLabel">Terms and conditions</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn_1" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	
+	<!-- COMMON SCRIPTS -->
+<!--    <script src="outer/js/common_scripts.js"></script>
+	<script src="outer/js/common_func.js"></script>
 
-            <!--      <p class="mb-0">
-                    <a href="register.html" class="text-center">Register a new membership</a>
-                  </p>-->
-                </div>
-                <!-- /.login-card-body -->
-            </div>
-        </div>
-        <!-- /.login-box -->
-
-        <!-- jQuery -->
-        <script src="plugins/jquery/jquery.min.js"></script>
+	 SPECIFIC SCRIPTS 
+	<script src="outer/js/pw_strenght.js"></script>	-->
+ <script src="plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
@@ -128,47 +207,8 @@
         <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="plugins/jquery-validation/additional-methods.min.js"></script>
         <script language="javascript" type="text/javascript">
-
-//            function generateotp() {
-//
-//                var fourdigitsrandom = Math.floor(1000 + Math.random() * 9000);
-//                $("#otp_send").val(fourdigitsrandom);
-////alert(fourdigitsrandom);
-//
-//
-//                //    var email = $("#txtEncEmail").val();
-//                var mobile = $("#txtEncMobile").val();
-//                if (mobile != "") {
-//                    $.ajax({
-//                        url: 'forms/sendOtp.php',
-//                        type: 'get',
-//                        dataType: 'json',
-//                        data: {'mobile': mobile, 'otp': fourdigitsrandom},
-//                        contentType: 'application/json',
-//                        success: function(data) {
-//                            if (data.status == 'success') {
-//                                alert("OTP send on your mobile number");
-//                            } else {
-//                                alert("Wrong mobile number entered or otp service is not working");
-//                            }
-//                            //  alert(data.status);
-//                            // $('#target').html(data.msg);
-//                        }
-//                        //   data: JSON.stringify(person)
-//                    });
-//
-//                } else {
-//                    alert("Please fill the data");
-//                }
-//
-//            }
-//            
+    
             $(document).ready(function() {
-
-
-
-
-
 
                 $.validator.setDefaults({
                     submitHandler: function() {
@@ -239,5 +279,5 @@
 
 
         </script>
-    </body>
+</body>
 </html>
