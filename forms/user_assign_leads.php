@@ -321,10 +321,15 @@ echo $obj->fill_combo($query, $user_id, false, 'Select');
                                     <tbody>
 <?php
 if ($_SESSION['lead_form_table'] != "") {
-    $listview_sql = "select * from " . $_SESSION['lead_form_view'] . " a  where 1=1 and a.lead_status ='N' and  a.user_id=" . $_SESSION['user_id'] . $condition;
-    // $listview_sql = "SELECT * FROM `view_lead_real_estate`  a  where 1=1 and a.user_id=" . $_SESSION['user_id'] . $condition;
+   // $listview_sql = "select * from " . $_SESSION['lead_form_view'] . " a  where 1=1 and a.lead_status ='N' and  a.user_id=" . $_SESSION['user_id'] . $condition;
+  
+      // $listview_sql = "select * from " . $_SESSION['lead_form_view'] . " a  where 1=1 and a.lead_status ='N' and  a.user_id=" . $_SESSION['user_id'] . $condition;
+  $listview_sql = "select * from ".$_SESSION['lead_form_view']." a left join trn_lead_assignment t on t.lead_id=a.lead_id where 1=1 and a.lead_status ='I' and t.transfer_to=".$_SESSION['user_id'];
 } else {
     $listview_sql = "select * from mst_lead a  where 1=1 and a.user_id=" . $_SESSION['user_id'] . $condition;
+    
+    
+    
 }
 //echo $listview_sql;exit;
 $result = $obj->execute($listview_sql, $error_message);

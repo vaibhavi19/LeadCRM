@@ -15,6 +15,9 @@ if ($lead_id == "") {
     echo message_show('Invalid request for lead', 'error');
     exit;
 }
+
+
+$stage_id = $obj->get_execute_scalar('select stage_id from ' . $_SESSION['lead_form_table'] . ' where lead_id=' . $lead_id, $error_message);
 //$_SESSION['lead_form_table'];
 //$_SESSION['lead_form_view'];
 //echo "<pre>";
@@ -30,7 +33,7 @@ switch ($lead_status) {
 
         break;
     case "I":
-        $inprocess_status  = 'btn-success';
+        $inprocess_status = 'btn-success';
         $new_status = $lost_status = $close_status = $converted_status = "btn-default";
 
         break;
@@ -40,18 +43,17 @@ switch ($lead_status) {
 
         break;
     case "A":
-        $converted_status  = 'btn-success';
-         $new_status = $inprocess_status = $close_status =$lost_status =  "btn-default";
+        $converted_status = 'btn-success';
+        $new_status = $inprocess_status = $close_status = $lost_status = "btn-default";
 
         break;
     case "C":
-       $close_status  = 'btn-success';
-         $new_status = $inprocess_status = $lost_status = $converted_status =  "btn-default";
+        $close_status = 'btn-success';
+        $new_status = $inprocess_status = $lost_status = $converted_status = "btn-default";
         break;
     default:
         $new_status = $converted_status = $inprocess_status = $lost_status = $close_status = "";
 }
-
 ?>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -69,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo message_show($error_message, "error");
         } else {
             if ($lead_id) {
-                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added followup for the lead <b>#' . $lead_id . "</b> on " . $followup_date;
+                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added followup for the lead <b>#' . $lead_id . "</b> with followup date  " . $followup_date;
                 $log_response = $obj->save_lead_log($activity_desc, 'FOLLOWUP_REQUEST', $lead_id, $_SESSION['client_id']);
             }
             echo message_show('Followup request successfully added for this lead.', 'success');
@@ -89,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo message_show($error_message, "error");
         } else {
             if ($lead_id) {
-                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added reminder for the lead <b>#' . $lead_id . "</b> on " . $reminder_date;
+                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added reminder for the lead <b>#' . $lead_id . "</b> with reminder date  " . $reminder_date;
                 $log_response = $obj->save_lead_log($activity_desc, 'REMINDER_REQUEST', $lead_id, $_SESSION['client_id']);
             }
             echo message_show('Reminder request successfully added for this lead.', 'success');
@@ -109,11 +111,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo message_show($error_message, "error");
         } else {
             if ($lead_id) {
-                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added notes for the lead <b>#' . $lead_id . "</b> on " . date('Y-M-d');
+                $activity_desc = strtoupper($_SESSION['user_name']) . ' has added notes for the lead <b>#' . $lead_id . "</b> on " . date('d-M-Y');
                 $log_response = $obj->save_lead_log($activity_desc, 'ADD_NOTE', $lead_id, $_SESSION['client_id']);
             }
             echo message_show('Notes addedd successfully added for this lead.', 'success');
         }
+    }
+
+    if (isset($_POST['change_status'])) {
+        $array = array();
+        $stage_id = $_POST['lead_status'];
+        $lead_status = '';
+        if($stage_id == '1'){
+            $lead_status = 'N';
+            $current_status = 'New';
+        }elseif($stage_id == '2'){
+               $lead_status = 'I';
+                  $current_status = 'Inprocess';
+        }elseif($stage_id == '3'){
+               $lead_status = 'L';
+                  $current_status = 'Lost';
+        }elseif($stage_id == '4'){
+               $lead_status = 'A';
+                  $current_status = 'Converted';
+        }elseif($stage_id == '5'){
+               $lead_status = 'C';
+                  $current_status = 'Close';
+        }
+        $query = "update " . $_SESSION['lead_form_table'] . " set stage_id=" . $stage_id . ",lead_status='$lead_status' where lead_id=" . $lead_id;
+
+        array_push($array, $query);
+        if (!$obj->execute_sqli_array($array, $error_message)) {
+            echo message_show($error_message, "error");
+        } else {
+            if ($lead_id) {
+                $activity_desc = strtoupper($_SESSION['user_name']) . ' has change the status of the lead to';
+                $log_response = $obj->save_lead_log($activity_desc, 'CHANGE_STATUS', $lead_id, $_SESSION['client_id']);
+            }
+            echo message_show('Change status of this lead successfully.', 'success');
+         
+              header("Location:dashboard_lead.php?lid=".$lead_id);
+        }
+
+//        echo "<pre>";
+//        print_r($_POST);
+//        exit;
     }
 }
 ?>
@@ -134,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card-header card-blue">
                         <h3 class="card-title card-blue flashit" style="font-size:25px;"><b>#LEAD <?php echo $lead_id; ?></b></h3>
                     </div>
-  
+
                     <div class="card-body">
                         <div id="actions" class="row">
                             <div class="col-lg-12">
@@ -199,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <i class="fas fa-phone-volume"></i>
                                     </span>
                                     <div class="info-box-content">
-                                        <span class="info-box-text">Calling</span>
+                                        <span class="info-box-text" data-toggle="modal" data-target="#modal-change-status">Change Status</span>
 <!--                                        <span class="info-box-number">760</span>-->
                                     </div>
                                     <!-- /.info-box-content -->
@@ -249,36 +291,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(followup_date,'%d-%b-%Y %h:%i %p') as `followup_date` FROM `lead_followup` order by created_on ASC";
+                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(followup_date,'%d-%b-%Y %h:%i %p') as `followup_date` FROM `lead_followup`  where lead_id=" . $lead_id . " order by created_on ASC";
                                             $result = $obj->execute($query, $error_message);
                                             $i = 1;
                                             ?>
                                             <tbody>
                                                 <?php
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($row['status'] == 'active') {
-                                                        $class = 'bg-danger';
-                                                    } else {
-                                                        $class = 'bg-warning';
+                                                if ($result->num_rows != 0) {
+                                                    while ($row = mysqli_fetch_array($result)) {
+                                                        if ($row['status'] == 'active') {
+                                                            $class = 'bg-danger';
+                                                        } else {
+                                                            $class = 'bg-warning';
+                                                        }
+                                                        ?>
+
+
+                                                        <tr>
+                                                            <td><?php echo $i; ?></td>
+                                                            <td><?php echo $row['followup_date']; ?></td>
+                                                            <td><?php echo $row['remarks']; ?></td>
+        <!--                                                    <td>
+                                                                <div class="progress progress-xs">
+                                                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                                                </div>
+                                                                
+                                                                
+                                                            </td>-->
+                                                            <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
+                                                        </tr>
+                                                        <?php
+                                                        $i++;
                                                     }
-                                                    ?>
-
-
-                                                    <tr>
-                                                        <td><?php echo $i; ?></td>
-                                                        <td><?php echo $row['followup_date']; ?></td>
-                                                        <td><?php echo $row['remarks']; ?></td>
-    <!--                                                    <td>
-                                                            <div class="progress progress-xs">
-                                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                                            </div>
-                                                            
-                                                            
-                                                        </td>-->
-                                                        <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
-                                                    </tr>
-                                                    <?php
-                                                    $i++;
+                                                } else {
+                                                    echo "<tr><td colspan=4>No Records Found</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>
@@ -312,36 +358,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(reminder_date,'%d-%b-%Y %h:%i %p') as `reminder_date` FROM `lead_reminder` order by created_on ASC";
+                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(reminder_date,'%d-%b-%Y %h:%i %p') as `reminder_date` FROM `lead_reminder`  where lead_id=" . $lead_id . "  order by created_on ASC";
                                             $result = $obj->execute($query, $error_message);
                                             $i = 1;
                                             ?>
                                             <tbody>
                                                 <?php
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($row['status'] == 'active') {
-                                                        $class = 'bg-danger';
-                                                    } else {
-                                                        $class = 'bg-warning';
+                                                if ($result->num_rows != 0) {
+                                                    while ($row = mysqli_fetch_array($result)) {
+                                                        if ($row['status'] == 'active') {
+                                                            $class = 'bg-danger';
+                                                        } else {
+                                                            $class = 'bg-warning';
+                                                        }
+                                                        ?>
+
+
+                                                        <tr>
+                                                            <td><?php echo $i; ?></td>
+                                                            <td><?php echo $row['reminder_date']; ?></td>
+                                                            <td><?php echo $row['remarks']; ?></td>
+        <!--                                                    <td>
+                                                                <div class="progress progress-xs">
+                                                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                                                </div>
+                                                                
+                                                                
+                                                            </td>-->
+                                                            <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
+                                                        </tr>
+                                                        <?php
+                                                        $i++;
                                                     }
-                                                    ?>
-
-
-                                                    <tr>
-                                                        <td><?php echo $i; ?></td>
-                                                        <td><?php echo $row['reminder_date']; ?></td>
-                                                        <td><?php echo $row['remarks']; ?></td>
-    <!--                                                    <td>
-                                                            <div class="progress progress-xs">
-                                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                                            </div>
-                                                            
-                                                            
-                                                        </td>-->
-                                                        <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
-                                                    </tr>
-                                                    <?php
-                                                    $i++;
+                                                } else {
+                                                    echo "<tr><td colspan=4>No Records Found</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>
@@ -375,36 +425,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(reminder_date,'%d-%b-%Y %h:%i %p') as `reminder_date` FROM `lead_reminder` order by created_on ASC";
+                                            $query = "SELECT remarks, case when status='A' then 'Pending' else 'Done' end as `status`,date_format(reminder_date,'%d-%b-%Y %h:%i %p') as `reminder_date` FROM `lead_reminder`  where lead_id=" . $lead_id . "  order by created_on ASC";
                                             $result = $obj->execute($query, $error_message);
                                             $i = 1;
                                             ?>
                                             <tbody>
                                                 <?php
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($row['status'] == 'active') {
-                                                        $class = 'bg-danger';
-                                                    } else {
-                                                        $class = 'bg-warning';
+                                                if ($result->num_rows != 0) {
+                                                    while ($row = mysqli_fetch_array($result)) {
+                                                        if ($row['status'] == 'active') {
+                                                            $class = 'bg-danger';
+                                                        } else {
+                                                            $class = 'bg-warning';
+                                                        }
+                                                        ?>
+
+
+                                                        <tr>
+                                                            <td><?php echo $i; ?></td>
+                                                            <td><?php echo $row['reminder_date']; ?></td>
+                                                            <td><?php echo $row['remarks']; ?></td>
+        <!--                                                    <td>
+                                                                <div class="progress progress-xs">
+                                                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                                                </div>
+                                                                
+                                                                
+                                                            </td>-->
+                                                            <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
+                                                        </tr>
+                                                        <?php
+                                                        $i++;
                                                     }
-                                                    ?>
-
-
-                                                    <tr>
-                                                        <td><?php echo $i; ?></td>
-                                                        <td><?php echo $row['reminder_date']; ?></td>
-                                                        <td><?php echo $row['remarks']; ?></td>
-    <!--                                                    <td>
-                                                            <div class="progress progress-xs">
-                                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                                            </div>
-                                                            
-                                                            
-                                                        </td>-->
-                                                        <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
-                                                    </tr>
-                                                    <?php
-                                                    $i++;
+                                                } else {
+                                                    echo "<tr><td colspan=4>No Records Found</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>
@@ -437,13 +491,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <th style="width: 40px">Status</th>
                                                 </tr>
                                             </thead>
-                                            <?php
-                                            $query = "SELECT notes, case when status='A' then 'Pending' else 'Done' end as `status` FROM `lead_notes` order by created_on ASC";
-                                            $result = $obj->execute($query, $error_message);
-                                            $i = 1;
-                                            ?>
+<?php
+$query = "SELECT notes, case when status='A' then 'Pending' else 'Done' end as `status` FROM `lead_notes`  where lead_id=" . $lead_id . "  order by created_on ASC";
+$result = $obj->execute($query, $error_message);
+$i = 1;
+?>
                                             <tbody>
-                                                <?php
+                                            <?php
+                                            // print_r($result['num_rows']);exit;
+                                            if ($result->num_rows != 0) {
+                                                //  echo "vrvbjvnj";exit;
                                                 while ($row = mysqli_fetch_array($result)) {
                                                     if ($row['status'] == 'active') {
                                                         $class = 'bg-danger';
@@ -453,23 +510,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     ?>
 
 
-                                                    <tr>
-                                                        <td><?php echo $i; ?></td>
+                                                        <tr>
+                                                            <td><?php echo $i; ?></td>
 
-                                                        <td><?php echo $row['notes']; ?></td>
-    <!--                                                    <td>
-                                                            <div class="progress progress-xs">
-                                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                                            </div>
-                                                            
-                                                            
-                                                        </td>-->
-                                                        <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
-                                                    </tr>
-                                                    <?php
-                                                    $i++;
-                                                }
-                                                ?>
+                                                            <td><?php echo $row['notes']; ?></td>
+        <!--                                                    <td>
+                                                                <div class="progress progress-xs">
+                                                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                                                </div>
+                                                                
+                                                                
+                                                            </td>-->
+                                                            <td><span class="badge <?php echo $class; ?>"><?php echo $row['status']; ?></span></td>
+                                                        </tr>
+        <?php
+        $i++;
+    }
+} else {
+    echo "<tr><td colspan=3>No Records Found</td></tr>";
+}
+?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -602,6 +662,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+
+<div class="modal fade" id="modal-change-status">
+    <div class="modal-dialog">
+        <form name="followup_form" id="followup_form" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change status of this lead</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <label>Status </label>
+                    <select name="lead_status" id="" class="form-control"  >
+                        <!--                        <option>Select lead status</option>-->
+<?php
+$query = " select stage_id,stage_name  from mst_lead_stages ";
+echo $obj->fill_combo($query, $stage_id, false);
+?>
+                    </select>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" name="change_status" id="change_status" class="btn btn-primary">Change Status of lead</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 <script>
     $(function() {
         $('#reservationdatetime').datetimepicker({icons: {time: 'far fa-clock'}});

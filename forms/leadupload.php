@@ -14,11 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_REQUEST['submit'])) {
 
 
-
-
-
-
-
         if (isset($_POST["submit"])) {
 
             if (isset($_FILES["file"])) {
@@ -103,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //                             print_r($i_params);exit;
                             $i_params_str = implode(',', $i_params);
                             $query .= $i_params_str;
-                            $query .= ',source_id) VALUES ';
+                            $query .= ',source_id,lead_status) VALUES ';
                             $numberOfRecords = count($lineArray);
 //                            print_r($lineArray);exit;
                             for ($i = 1; $i < $numberOfRecords - 2; $i ++) {
@@ -114,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 foreach ($colArray as $key => $val) {
                                     $query = $query . ' "' . $val . '",';
                                 }
-                                $query = $query . ' 2),';
+                                $query = $query . ' 2,"N"),';
                             }
 //                            echo $query;exit;
                             // last row without a comma
@@ -123,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             foreach ($colArray as $key => $val) {
                                 $query = $query . ' "' . $val . '",';
                             }
-                            $query = $query . '2)';
+                            $query = $query . '2,"N")';
                             $i = $i + 1;
 
                             // storing the last truncated record and this will become the
